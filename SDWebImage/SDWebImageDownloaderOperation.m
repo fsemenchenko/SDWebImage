@@ -294,7 +294,8 @@ didReceiveResponse:(NSURLResponse *)response
 }
 
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
-    [self.imageData appendData:data];
+    NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    [self.imageData appendData: [[NSData alloc] initWithBase64EncodedString:[dataString stringByReplacingOccurrencesOfString:@"\"" withString:@""] options:0]];
 
     if ((self.options & SDWebImageDownloaderProgressiveDownload) && self.expectedSize > 0) {
         // The following code is from http://www.cocoaintheshell.com/2011/05/progressive-images-download-imageio/
